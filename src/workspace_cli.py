@@ -64,7 +64,10 @@ def _add_pipeline_args(parser: argparse.ArgumentParser) -> None:
 def build_pipeline(args: argparse.Namespace) -> RAGPipeline:
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise EnvironmentError("Set OPENAI_API_KEY before running workspace commands.")
+        raise EnvironmentError(
+            "OPENAI_API_KEY not found. Please set it in your .env file or as an environment variable.\n"
+            "Example: echo 'OPENAI_API_KEY=your-key-here' > .env"
+        )
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     return RAGPipeline(
         api_key=api_key,

@@ -62,12 +62,18 @@ def main() -> None:
     args = parser.parse_args()
     api_key = os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise EnvironmentError("Set the OPENAI_API_KEY environment variable before running.")
+        raise EnvironmentError(
+            "OPENAI_API_KEY not found. Please set it in your .env file or as an environment variable.\n"
+            "Example: echo 'OPENAI_API_KEY=your-key-here' > .env"
+        )
     anthropic_key = os.getenv("ANTHROPIC_API_KEY")
     ocr_provider = args.ocr_provider
     if args.use_claude_ocr:
         if not anthropic_key:
-            raise EnvironmentError("Set ANTHROPIC_API_KEY to enable Claude OCR.")
+            raise EnvironmentError(
+                "ANTHROPIC_API_KEY required for Claude OCR. Please set it in your .env file or as an environment variable.\n"
+                "Example: echo 'ANTHROPIC_API_KEY=your-key-here' >> .env"
+            )
         ocr_provider = "claude-3-5-sonnet-latest"
     pipeline = RAGPipeline(
         api_key=api_key,
