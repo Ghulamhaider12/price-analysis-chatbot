@@ -6,10 +6,14 @@ from typing import List, Optional
 
 import pandas as pd
 import streamlit as st
+from dotenv import load_dotenv
 
 from cost_analysir_chatbot.rag_pipeline import RAGPipeline
 from cost_analysir_chatbot.workspace_manager import WorkspaceManager
 from cost_analysir_chatbot.workspace_indexer import WorkspaceIndexer
+
+# Load environment variables from .env file
+load_dotenv()
 
 SUPPORTED_EXTS = [
     "pdf",

@@ -8,9 +8,10 @@ This project ingests investment documents, extracts text with OCR, generates Ope
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-export OPENAI_API_KEY=sk-...
-# Optional: for Claude responses
-# export ANTHROPIC_API_KEY=sk-ant-...
+
+# Set up environment variables
+cp env.example .env
+# Edit .env file and add your actual API keys
 ```
 
 ## Usage
@@ -94,7 +95,7 @@ You can swap models with `--embedding-model` or `--chat-model` to reflect pricin
 
 ### Using Claude (Anthropic)
 
-- Provide `export ANTHROPIC_API_KEY=sk-ant-...`.
+- Add `ANTHROPIC_API_KEY=sk-ant-...` to your `.env` file.
 - Supported models include the latest Claude 4.5 generation (`claude-sonnet-4-5`, `claude-haiku-4-5`), Claude 4.1 (`claude-opus-4-1`), and legacy 3.x models (`claude-3-5-sonnet-latest`, `claude-3-opus-latest`, `claude-3-haiku-latest`). Both alias and dated formats are available—pick whichever your account recognizes.
 - In the CLI, either pass `--chat-provider anthropic` or select a `claude-*` model (provider auto-detected). If a dated string returns 404, switch to the matching `-latest` alias.
 - In the Streamlit UI choose "Anthropic Claude 3.x" from the Chat Provider dropdown and pick the desired Claude model. Both alias and dated IDs are listed to avoid the not-found error.

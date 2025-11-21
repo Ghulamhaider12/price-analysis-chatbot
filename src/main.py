@@ -5,7 +5,12 @@ import json
 import os
 from pathlib import Path
 
+from dotenv import load_dotenv
+
 from cost_analysir_chatbot.rag_pipeline import RAGPipeline
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def build_parser() -> argparse.ArgumentParser:

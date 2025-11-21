@@ -6,9 +6,14 @@ import os
 from pathlib import Path
 from typing import List
 
+from dotenv import load_dotenv
+
 from cost_analysir_chatbot.rag_pipeline import RAGPipeline
 from cost_analysir_chatbot.workspace_manager import WorkspaceManager
 from cost_analysir_chatbot.workspace_indexer import WorkspaceIndexer
+
+# Load environment variables from .env file
+load_dotenv()
 
 
 def build_parser() -> argparse.ArgumentParser:
