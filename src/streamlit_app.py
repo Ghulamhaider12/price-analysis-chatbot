@@ -57,15 +57,40 @@ CHAT_MODEL_OPTIONS = {
 
 
 def get_workspace_manager() -> WorkspaceManager:
-    base_dir = Path(os.getenv("WORKSPACES_DIR", "workspaces"))
+    # Try Streamlit secrets first, then environment variables
+    try:
+        workspaces_dir = st.secrets.get("WORKSPACES_DIR", "workspaces")
+    except (AttributeError, FileNotFoundError):
+        workspaces_dir = os.getenv("WORKSPACES_DIR", "workspaces")
+    
+    base_dir = Path(workspaces_dir)
     return WorkspaceManager(base_path=base_dir)
 
 
 def ensure_api_keys() -> tuple[str, Optional[str]]:
-    api_key = os.getenv("OPENAI_API_KEY")
-    anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    # Try Streamlit secrets first, then environment variables
+    try:
+        api_key = st.secrets.get("OPENAI_API_KEY") or os.getenv("OPENAI_API_KEY")
+        anthropic_key = st.secrets.get("ANTHROPIC_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+    except (AttributeError, FileNotFoundError):
+        api_key = os.getenv("OPENAI_API_KEY")
+        anthropic_key = os.getenv("ANTHROPIC_API_KEY")
+    
     if not api_key:
-        st.error("Set the OPENAI_API_KEY environment variable before using the app.")
+        st.error("""
+        **API Key Required**: Please set your OpenAI API key.
+        
+        **For local development:**
+        1. Create a `.env` file in your project root
+        2. Add: `OPENAI_API_KEY=your-key-here`
+        
+        **For Streamlit Cloud deployment:**
+        1. Go to your app settings
+        2. Add `OPENAI_API_KEY` in the Secrets section
+        
+        **For other platforms:**
+        - Set the `OPENAI_API_KEY` environment variable
+        """)
         st.stop()
     return api_key, anthropic_key
 
@@ -96,7 +121,13 @@ def sidebar_models(anthropic_key: Optional[str]) -> dict:
         index=0,
     )
     top_k = st.slider("Context Passages", min_value=3, max_value=10, value=5)
-    use_claude_env = os.getenv("USE_CLAUDE_OCR", "false").lower() in {"1", "true", "yes"}
+    # Try Streamlit secrets first, then environment variables
+    try:
+        use_claude_env_val = st.secrets.get("USE_CLAUDE_OCR") or os.getenv("USE_CLAUDE_OCR", "false")
+    except (AttributeError, FileNotFoundError):
+        use_claude_env_val = os.getenv("USE_CLAUDE_OCR", "false")
+    
+    use_claude_env = use_claude_env_val.lower() in {"1", "true", "yes"}
     use_claude_ocr = st.checkbox(
         "Use Claude OCR (vision)",
         value=use_claude_env,

@@ -163,6 +163,7 @@ cython_debug/
 
 # Streamlit
 .streamlit/
+.streamlit/secrets.toml
 
 # API Keys and secrets
 *.key
